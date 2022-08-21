@@ -1,0 +1,19 @@
+{
+  "name": "authentication-basics",
+  "version": "1.0.0",
+  "description": "This project acts as an introduction to learn the basics about authentication using the middleware passport.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Houser97/Authentication-basics.git"
+  },
+  "author": "Arturo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Houser97/Authentication-basics/issues"
+  },
+  "homepage": "https://github.com/Houser97/Authentication-basics#readme"
+}
