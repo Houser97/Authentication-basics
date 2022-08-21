@@ -19,6 +19,17 @@ const User = mongoose.model(
     })
 );
 
+passport.use(
+    new LocalStrategy((username, password, done) => {
+        User.findOne({username: username}, (err, user) => {
+            if(err) return done(err);
+            if(!user) return done(null, false, {message: 'Incorrect username'});
+            if(user.password !== password) return done(null, false, {message: 'Incorrect password'});
+            return done(null, user);
+        });
+    })
+);
+
 const app = express();
 app.set('views', __dirname);
 app.set('view engine', "ejs");
@@ -28,8 +39,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({extended: false}));
 
-app.get('/', (req, res) => res.render('index'));
-app.get('/sign-up', (req, res) => res.render('sign-up-form'));
+app.get('/', (req, res) => res.render('./views/index'));
+app.get('/sign-up', (req, res) => res.render('./views/sign-up-form'));
 
 app.post('/sign-up', (req, res, next) => {
     const user = new User({
