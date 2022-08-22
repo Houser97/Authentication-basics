@@ -53,6 +53,12 @@ app.get('/', (req, res) => res.render('./views/index', {
     user: req.user,
 }));
 app.get('/sign-up', (req, res) => res.render('./views/sign-up-form'));
+app.get('/log-out', (req, res) => {
+    req.logout(function(err){
+        if(err) return next(err);
+        res.redirect('/');
+    });  
+});
 
 app.post('/sign-up', (req, res, next) => {
     const user = new User({
