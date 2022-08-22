@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const bcryptjs = require('bcryptjs');
 
 const mongoDB = 'mongodb+srv://Arturo:Houser@cluster0.pkcuhf2.mongodb.net/Authentication?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {useUnifiedTopology: true, useNewUrlParser: true});
@@ -18,6 +19,11 @@ const User = mongoose.model(
         password: {type: String, required: true}
     })
 );
+
+passport.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    next();
+})
 
 passport.use(
     new LocalStrategy((username, password, done) => {
