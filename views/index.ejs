@@ -7,7 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hello World!</h1>
+    <% if(user) {%>
+        <h1>Welcome back <%= user.username %></h1>
+        <a href="/log-out">LOG OUT</a>
+    <% } %>
     <h1>Please log in</h1>
     <form action="/log-in" method="POST">
         <label for="username">Username</label>
