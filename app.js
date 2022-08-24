@@ -6,6 +6,28 @@ const Schema = mongoose.Schema;
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcryptjs = require('bcryptjs');
+// Uso de NCONF
+let nconf = require('nconf');
+nconf.argv().env().file({file: './config.json'});
+
+// Se establecen las variables en NCONF
+nconf.set('database:user', 'Arturo');
+nconf.set('database:pwd', 'Houser');
+nconf.set('database:collection', 'Authentication');
+
+console.log(nconf.get('databse'));
+
+// Guardar el bojecto de configuración en el disco (disk)
+nconf.save(function(err){
+    require('fs').readFile('./config.json', function(err, data){
+        console.dir(JSON.parse(data.toString()))
+    })
+    if(err){
+        console.log(err.message);
+        return;
+    }
+    console.log('Configuration saved successfully.');
+})
 
 const mongoDB = 'mongodb+srv://Arturo:Houser@cluster0.pkcuhf2.mongodb.net/Authentication?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {useUnifiedTopology: true, useNewUrlParser: true});
