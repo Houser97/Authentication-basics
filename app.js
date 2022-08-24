@@ -20,18 +20,23 @@ const User = mongoose.model(
     })
 );
 
-passport.use(function(req, res, next){
-    res.locals.currentUser = req.user;
-    next();
-})
+// passport.use(function(req, res, next){
+//     res.locals.currentUser = req.user;
+//     next();
+// })
 
 passport.use(
     new LocalStrategy((username, password, done) => {
         User.findOne({username: username}, (err, user) => {
             if(err) return done(err);
             if(!user) return done(null, false, {message: 'Incorrect username'});
-            if(user.password !== password) return done(null, false, {message: 'Incorrect password'});
-            return done(null, user);
+            bcryptjs.compare(password, user.password, (err, res) => {
+                if(res) {
+                    return done(null, user)
+                } else {
+                    return done(null, false, {message: 'Incorrect password'})
+                };
+            })
         });
     })
 );
@@ -67,13 +72,16 @@ app.get('/log-out', (req, res) => {
 });
 
 app.post('/sign-up', (req, res, next) => {
-    const user = new User({
-        username: req.body.username,
-        password: req.body.password
-    }).save(err => {
+    bcryptjs.hash(req.body.password, 10, (err, hashedPassword) => {
         if(err) return next(err);
-        res.redirect('/');
-    });
+        const user = new User({
+            username: req.body.username,
+            password: hashedPassword,
+        }).save(err => {
+            if(err) return next(err);
+            res.redirect('/');
+        });
+    })
 });
 
 app.post('/log-in', passport.authenticate('local', {
